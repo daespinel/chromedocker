@@ -1,10 +1,12 @@
 FROM chrisdaish/google-chrome
 MAINTAINER David Espinel <dafespinelsa@unal.edu.co>
+
 RUN \
   apt-get update && apt-get purge openssh-client && apt-get install openssh-client -y && \
   apt-get install python -y && apt-get install -y net-tools
 
 #COPY hosts /etc/
+
 COPY hosts.sh /home/
 RUN	sudo chmod +x /home/hosts.sh
 
