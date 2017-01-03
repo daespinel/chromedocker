@@ -10,6 +10,12 @@ RUN \
 COPY hosts.sh /home/
 RUN	sudo chmod +x /home/hosts.sh
 
+COPY files/ /home/files/
+
+WORKDIR /home/files
+RUN python /home/files/generate_file.py --input /home/files/latency.DATA
+#RUN cp /home/files/00.hosts /etc/hosts
+
 WORKDIR /home
 
 EXPOSE 5901
@@ -17,7 +23,8 @@ EXPOSE 22
 
 RUN /home/hosts.sh
 
-ENTRYPOINT ["sh", "-c", "/home/hosts.sh ; /usr/local/bin/start-google-chrome.sh"]
+#ENTRYPOINT ["sh", "-c", "/home/hosts.sh ; /usr/local/bin/start-google-chrome.sh"]
+ENTRYPOINT ["sh", "-c", "cp /home/files/00.hosts /etc/hosts ; /usr/local/bin/start-google-chrome.sh"]
 
 #CMD /bin/sh \
 #	&& echo '192.168.0.1 page1.com' >> /etc/hosts \
