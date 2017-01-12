@@ -16,6 +16,12 @@ WORKDIR /home/files
 RUN python /home/files/generate_file.py --input /home/files/latency.DATA
 #RUN cp /home/files/00.hosts /etc/hosts
 
+COPY ssl_certificates/apache-001.crt /usr/local/share/ca-certificates/
+COPY ssl_certificates/apache-002.crt /usr/local/share/ca-certificates/
+COPY experiment.sh /home/
+RUN chmod 755 /home/experiment.sh
+
+
 WORKDIR /home
 
 EXPOSE 5901
