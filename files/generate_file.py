@@ -16,6 +16,7 @@ address = "192.168."
 countSites=4
 count=0
 sites=1
+latencylist=[]
 
 #-------------------------------------------------------------------------------
 # Argument parser
@@ -38,19 +39,28 @@ def hname2hosts(hname, proto,loss):
 	global countSites
 	global count
 	global sites
+	global latencylist
+	
 	output = ""
 	words= hname.split()
 	address = "192.168."
 	if (proto == 0):
-		x= (0 * 128) + loss + (count * 3)
+		x= (0 * 128) + loss
 	else:
-		x= (1 * 128) +  loss + (count * 3)
+		x= (1 * 128) +  loss
 	address = address + str(x)+"."
-	address = address + str(countSites)
+	pagelatency = latency2list(float(words[2])) 
+	address = address + str(pagelatency)
 	output = output + "\n".join([address + " "+ words[0] ])
 	output = output + "\n"
 	return output
 
+# Produce a latency value among 70 for the giving latency of a page
+def latency2list(latency):
+	global latencylist
+	for iterl in latencylist:
+		if (latency<=iterl):
+			return latencylist.index(iterl)+4
 
 # ------------------------------------------------------------------------------
 #** MAIN **#
@@ -59,6 +69,9 @@ if __name__ == '__main__':
 
 	# Get parameters from keyboard
 	params = process_opt()
+
+	for i in range(70):
+		latencylist.append((389.796/70)*(i+1))
 
 	# Initializing output files
 	class OutputFile():
@@ -115,14 +128,14 @@ if __name__ == '__main__':
 			output["00"].hosts5.write(hname2hosts(hname,1,1))
 			output["00"].hosts6.write(hname2hosts(hname,1,2))
 			
-			if(countSites<255):
+#			if(countSites<255):
 #				address = address + str(countSites)
-				countSites +=1
+#				countSites +=1
 #				print "count sites", countSites
-			if(countSites == 255):
-				count +=1
-				countSites = 1
-			sites +=1
+#			if(countSites == 255):
+#				count +=1
+#				countSites = 1
+#			sites +=1
 
 	for i in output.values():
 		i.hosts1.close()
